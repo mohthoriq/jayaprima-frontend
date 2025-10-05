@@ -1,0 +1,259 @@
+<div class="row">
+    <div class="col-12">
+        <h2><i class="fas fa-flask"></i> API Testing Interface</h2>
+        <p class="text-muted">Test various API endpoints and see real-time responses</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-play"></i> Test Set Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="setStatusForm">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="maintenance">Maintenance</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <input type="text" class="form-control" id="message" name="message" placeholder="Custom status message">
+                    </div>
+                    <div class="mb-3">
+                        <label for="customData" class="form-label">Custom Data (JSON)</label>
+                        <textarea class="form-control" id="customData" name="customData" rows="3" placeholder='{"key": "value"}'></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Set Status
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-database"></i> Test Data Endpoint
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="testDataForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="John Doe">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="john@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="age" class="form-label">Age</label>
+                        <input type="number" class="form-control" id="age" name="age" placeholder="25" min="0" max="150">
+                    </div>
+                    <div class="mb-3">
+                        <label for="testMessage" class="form-label">Message</label>
+                        <input type="text" class="form-control" id="testMessage" name="message" placeholder="Test message">
+                    </div>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i> Test Data
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt"></i> Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-info" onclick="getStatus()">
+                        <i class="fas fa-info-circle"></i> Get Status
+                    </button>
+                    <button class="btn btn-warning" onclick="healthCheck()">
+                        <i class="fas fa-heartbeat"></i> Health Check
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearResults()">
+                        <i class="fas fa-trash"></i> Clear Results
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-link"></i> Direct API Links
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="/api/test/set_status" class="list-group-item list-group-item-action" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> GET /api/test/set_status
+                    </a>
+                    <a href="/api/test/get_status" class="list-group-item list-group-item-action" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> GET /api/test/get_status
+                    </a>
+                    <a href="/api/test/health" class="list-group-item list-group-item-action" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> GET /api/test/health
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-terminal"></i> API Response
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="responseContainer">
+                    <div class="text-muted text-center py-4">
+                        <i class="fas fa-code fa-3x mb-3"></i>
+                        <p>API responses will appear here after testing endpoints</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Set Status Form Handler
+document.getElementById('setStatusForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const data = {
+        status: formData.get('status'),
+        message: formData.get('message')
+    };
+    
+    // Parse custom data if provided
+    const customDataText = formData.get('customData');
+    if (customDataText) {
+        try {
+            data.data = JSON.parse(customDataText);
+        } catch (error) {
+            showResponse({ error: 'Invalid JSON in custom data field' }, 'danger');
+            return;
+        }
+    }
+    
+    try {
+        const response = await fetch('/api/test/set_status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        showResponse(result, response.ok ? 'success' : 'danger');
+    } catch (error) {
+        showResponse({ error: error.message }, 'danger');
+    }
+});
+
+// Test Data Form Handler
+document.getElementById('testDataForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        age: parseInt(formData.get('age')) || undefined,
+        message: formData.get('message')
+    };
+    
+    // Remove empty fields
+    Object.keys(data).forEach(key => {
+        if (data[key] === '' || data[key] === undefined) {
+            delete data[key];
+        }
+    });
+    
+    try {
+        const response = await fetch('/api/test/test_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        showResponse(result, response.ok ? 'success' : 'danger');
+    } catch (error) {
+        showResponse({ error: error.message }, 'danger');
+    }
+});
+
+// Quick Action Functions
+async function getStatus() {
+    try {
+        const response = await fetch('/api/test/get_status');
+        const result = await response.json();
+        showResponse(result, response.ok ? 'info' : 'danger');
+    } catch (error) {
+        showResponse({ error: error.message }, 'danger');
+    }
+}
+
+async function healthCheck() {
+    try {
+        const response = await fetch('/api/test/health');
+        const result = await response.json();
+        showResponse(result, response.ok ? 'success' : 'danger');
+    } catch (error) {
+        showResponse({ error: error.message }, 'danger');
+    }
+}
+
+function clearResults() {
+    document.getElementById('responseContainer').innerHTML = `
+        <div class="text-muted text-center py-4">
+            <i class="fas fa-code fa-3x mb-3"></i>
+            <p>API responses will appear here after testing endpoints</p>
+        </div>
+    `;
+}
+
+// Response Display Function
+function showResponse(data, type = 'info') {
+    const container = document.getElementById('responseContainer');
+    const timestamp = new Date().toLocaleString();
+    
+    container.innerHTML = `
+        <div class="alert alert-${type} mb-3">
+            <i class="fas fa-clock"></i> Response received at ${timestamp}
+        </div>
+        <div class="json-display">${JSON.stringify(data, null, 2)}</div>
+    `;
+}
+</script>

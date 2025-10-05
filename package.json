@@ -1,0 +1,31 @@
+{
+  "name": "jayaprima-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/mohthoriq/jayaprima-frontend#readme",
+  "bugs": {
+    "url": "https://github.com/mohthoriq/jayaprima-frontend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohthoriq/jayaprima-frontend.git"
+  },
+  "license": "ISC",
+  "author": "Mohammad Thoriq",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "SET NODE_ENV=development_local&&nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "express-handlebars": "^7.1.2",
+    "handlebars": "^4.7.8",
+    "joi": "^17.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

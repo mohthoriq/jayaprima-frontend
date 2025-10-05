@@ -1,0 +1,91 @@
+<div class="row">
+    <div class="col-12">
+        <div class="jumbotron bg-primary text-white p-5 rounded mb-4">
+            <h1 class="display-4">
+                <i class="fas fa-rocket"></i> Welcome to Jaya Prima Frontend
+            </h1>
+            <p class="lead">A comprehensive Express.js application with Handlebars templating, API services, and modern web interface.</p>
+            <hr class="my-4">
+            <p>Explore our API endpoints, test services, and monitor system status through this interactive dashboard.</p>
+            <a class="btn btn-light btn-lg" href="/dashboard" role="button">
+                <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-flask fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">Test API</h5>
+                <p class="card-text">Test various API endpoints and see real-time responses with our interactive testing interface.</p>
+                <a href="/test" class="btn btn-primary">
+                    <i class="fas fa-play"></i> Start Testing
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-heartbeat fa-3x text-success mb-3"></i>
+                <h5 class="card-title">System Status</h5>
+                <p class="card-text">Monitor server health, performance metrics, and service availability in real-time.</p>
+                <a href="/status" class="btn btn-success">
+                    <i class="fas fa-chart-line"></i> View Status
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-tachometer-alt fa-3x text-info mb-3"></i>
+                <h5 class="card-title">Dashboard</h5>
+                <p class="card-text">Access the main dashboard with comprehensive overview of all system components.</p>
+                <a href="/dashboard" class="btn btn-info">
+                    <i class="fas fa-eye"></i> Open Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle"></i> Quick Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-server"></i> Server Information</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Environment:</strong> {{environment}}</li>
+                            <li><strong>Node Version:</strong> {{nodeVersion}}</li>
+                            <li><strong>Uptime:</strong> {{uptime}} seconds</li>
+                            <li><strong>Memory Usage:</strong> {{memoryUsage}} MB</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-link"></i> Available Endpoints</h6>
+                        <ul class="list-unstyled">
+                            <li><code>GET /api/test/set_status</code></li>
+                            <li><code>POST /api/test/set_status</code></li>
+                            <li><code>GET /api/test/get_status</code></li>
+                            <li><code>POST /api/test/test_data</code></li>
+                            <li><code>GET /api/test/health</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

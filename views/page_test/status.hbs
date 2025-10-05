@@ -1,0 +1,257 @@
+<div class="row">
+    <div class="col-12">
+        <h2><i class="fas fa-heartbeat"></i> System Status</h2>
+        <p class="text-muted">Real-time monitoring of system health and performance</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card text-white {{#if healthStatus.healthy}}bg-success{{else}}bg-danger{{/if}}">
+            <div class="card-body text-center">
+                <i class="fas fa-{{#if healthStatus.healthy}}check-circle{{else}}exclamation-triangle{{/if}} fa-3x mb-3"></i>
+                <h4>{{#if healthStatus.healthy}}Healthy{{else}}Unhealthy{{/if}}</h4>
+                <p class="mb-0">Overall Status</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <i class="fas fa-clock fa-3x mb-3"></i>
+                <h4>{{uptime}}s</h4>
+                <p class="mb-0">Uptime</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+                <i class="fas fa-memory fa-3x mb-3"></i>
+                <h4>{{memoryUsage}}MB</h4>
+                <p class="mb-0">Memory Usage</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-list-check"></i> Health Checks
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Check</th>
+                                <th>Status</th>
+                                <th>Details</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each healthChecks}}
+                            <tr>
+                                <td>
+                                    <i class="fas fa-{{icon}}"></i> {{name}}
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{#if status}}success{{else}}danger{{/if}}">
+                                        {{#if status}}Passing{{else}}Failing{{/if}}
+                                    </span>
+                                </td>
+                                <td>{{details}}</td>
+                                <td>{{timestamp}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie"></i> System Metrics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">CPU Usage</label>
+                    <div class="progress">
+                        <div class="progress-bar bg-{{cpuUsage.color}}" style="width: {{cpuUsage.percentage}}%">
+                            {{cpuUsage.percentage}}%
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Memory Usage</label>
+                    <div class="progress">
+                        <div class="progress-bar bg-{{memoryUsageBar.color}}" style="width: {{memoryUsageBar.percentage}}%">
+                            {{memoryUsageBar.percentage}}%
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Disk Usage</label>
+                    <div class="progress">
+                        <div class="progress-bar bg-{{diskUsage.color}}" style="width: {{diskUsage.percentage}}%">
+                            {{diskUsage.percentage}}%
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="text-center">
+                    <button class="btn btn-primary btn-sm" onclick="refreshStatus()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle"></i> System Info
+                </h6>
+            </div>
+            <div class="card-body">
+                <small>
+                    <strong>Platform:</strong> {{platform}}<br>
+                    <strong>Architecture:</strong> {{arch}}<br>
+                    <strong>Node Version:</strong> {{nodeVersion}}<br>
+                    <strong>Environment:</strong> {{environment}}
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-server"></i> Service Status
+                </h5>
+            </div>
+            <div class="card-body">
+                {{#each services}}
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <i class="fas fa-{{icon}}"></i> {{name}}
+                    </div>
+                    <span class="badge bg-{{#if status}}success{{else}}danger{{/if}}">
+                        {{#if status}}Online{{else}}Offline{{/if}}
+                    </span>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-history"></i> Recent Activity
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    {{#each recentActivity}}
+                    <div class="timeline-item mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-{{type}} rounded-pill">{{time}}</span>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <p class="mb-0">{{message}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-terminal"></i> Live Health Check
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <p class="mb-0">Run real-time health checks on all system components</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-success" onclick="runHealthCheck()">
+                            <i class="fas fa-play"></i> Run Health Check
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="healthCheckResults" class="json-display" style="display: none;">
+                    <!-- Health check results will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function refreshStatus() {
+    location.reload();
+}
+
+async function runHealthCheck() {
+    const resultsDiv = document.getElementById('healthCheckResults');
+    resultsDiv.style.display = 'block';
+    resultsDiv.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Running health check...</div>';
+    
+    try {
+        const response = await fetch('/api/test/health');
+        const result = await response.json();
+        
+        resultsDiv.innerHTML = `
+            <div class="alert alert-${response.ok ? 'success' : 'danger'} mb-3">
+                <i class="fas fa-${response.ok ? 'check-circle' : 'exclamation-triangle'}"></i> 
+                Health check completed at ${new Date().toLocaleString()}
+            </div>
+            ${JSON.stringify(result, null, 2)}
+        `;
+    } catch (error) {
+        resultsDiv.innerHTML = `
+            <div class="alert alert-danger mb-3">
+                <i class="fas fa-exclamation-triangle"></i> Health check failed
+            </div>
+            ${JSON.stringify({ error: error.message }, null, 2)}
+        `;
+    }
+}
+
+// Auto-refresh status every 30 seconds
+setInterval(function() {
+    refreshStatus();
+}, 30000);
+</script>
