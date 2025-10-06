@@ -5,7 +5,13 @@ module.exports = () => {
     const app = Router();
 
     // View Routes
-    app.get('/', DashboardController.index);
+    app.get('/', (req, res) => {
+        const data = {
+            layout:""
+        }
+        res.render('login', data);
+    });
+    app.get('/admin', DashboardController.index);
 
     return app;
 };

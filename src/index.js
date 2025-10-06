@@ -3,9 +3,9 @@ const { engine } = require('express-handlebars');
 const path = require('path');
 const api = require('./controller_api');
 const test = require('./controller_test');
-const view = require('./controller_view');
+const view = require('./controller_views');
 
-const app = express();
+const app = express(); 
 const PORT = process.env.PORT || 3000;
 
 // Handlebars configuration
@@ -52,9 +52,9 @@ app.use((req, res, next) => {
 });
 
 // API Routes
+app.use('/', view());
 app.use('/api', api());
 app.use('/test', test());
-app.use('/view', view());
 
 // Error handling middleware
 app.use((err, req, res, next) => {
